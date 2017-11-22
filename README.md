@@ -2,6 +2,8 @@
 
 XMover is a tool helping you to interactively position any visual object on screen and view how its co0rdinates change in browser console.
 
+XMover supposed to be used in graphic interfaces and games written in JavaScript.
+
 Just add some objects to xmover in any part of code as follows:
 
 ```
