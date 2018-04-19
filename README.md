@@ -16,3 +16,7 @@ You may add as many objects as you want as many times as desired passing one obj
 Then you can move added objects one by one on the scene using arrow keys. Also you can rotate them using <> keys, hide and reveal using sqr bracket ([]) keys. Switching between objects performed by -+ keys. Once you switched to next object it jumps and blinks once.
 
 As object's position and rotation changes these values are traced in console.
+
+
+Versions history:
+1.6 - Added scale
