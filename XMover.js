@@ -1,5 +1,5 @@
 /**
- *	XMover v.1.5 (c) ambuddy
+ *	XMover v.1.6 (c) ambuddy
  *
  *	XMover is a tool helping you to interactively position any visual object on screen
  *	and view how its co0rdinates change in browser console.
@@ -44,8 +44,10 @@ XMover.hotkeys	= {
 	RIGHT				: 39,			// → move
 	UP					: 38,			// ↑ move
 	DOWN				: 40,			// ↓ move
-	DECREASE			: 219,			// [ decrease alpha (hide)
-	INCREASE			: 221,			// ] increase alpha (show)
+	DECREASE_ALPHA		: 219,			// [ decrease alpha (hide)
+	INCREASE_ALPHA		: 221,			// ] increase alpha (show)
+	DECREASE_SCALE		: 57,			// 9 decrease scale
+	INCREASE_SCALE		: 48,			// 0 increase scale
 	PREV				: 189,			// - previous object
 	NEXT				: 187,			// + next object
 	ROTATE_LEFT			: 188,			// <
@@ -107,12 +109,22 @@ XMover.prototype._onKeyDown = function(event)
 			obj.y += (event.shiftKey ? this.posStepFast : this.posStep);
 			break;
 		
-		case XMover.hotkeys.DECREASE:
+		case XMover.hotkeys.DECREASE_ALPHA:
 			obj.alpha = Math.max(0, obj.alpha - this.alphaStep);
 			break;
 		
-		case XMover.hotkeys.INCREASE:
+		case XMover.hotkeys.INCREASE_ALPHA:
 			obj.alpha = Math.min(1, obj.alpha + this.alphaStep);
+			break;
+		
+		case XMover.hotkeys.DECREASE_SCALE:
+			obj.scale.x	= Math.max(0, obj.scale.x - (event.shiftKey ? this.rotStepFast : this.rotStep));
+			obj.scale.y	= Math.max(0, obj.scale.y - (event.shiftKey ? this.rotStepFast : this.rotStep));
+			break;
+		
+		case XMover.hotkeys.INCREASE_SCALE:
+			obj.scale.x	= obj.scale.x + (event.shiftKey ? this.rotStepFast : this.rotStep);
+			obj.scale.y	= obj.scale.y + (event.shiftKey ? this.rotStepFast : this.rotStep);
 			break;
 		
 		case XMover.hotkeys.PREV:
@@ -132,7 +144,14 @@ XMover.prototype._onKeyDown = function(event)
 			break;
 	}
 	
-	console.log((obj.id != undefined ? "{ id: " + obj.id + "," : "{"), "x:", obj.x, ", y:", obj.y, ", rotation:", this.roundTo(obj.rotation, 2), " }");
+	var id	= obj.id != undefined ? obj.id : obj.title != undefined ? obj.title : obj.name != undefined ? obj.name : undefined;
+	
+	console.log(
+		(id != undefined ? "{ id: " + id + "," : "{"),
+		"x:", obj.x,
+		", y:", obj.y,
+		", rotation:", this.roundTo(obj.rotation, 2),
+		", scale:{ x:", this.roundTo(obj.scale.x, 2), ", y:", this.roundTo(obj.scale.y, 2), "} }");
 };
 
 XMover.prototype.nextObject = function(increment)
@@ -197,5 +216,10 @@ XMover.prototype.roundTo = function(value, places)
 
 
 var xmover = new XMover();
+
+function xmove(objects)
+{
+	xmover.add.apply(xmover, arguments);
+}
 
 $(window).on("keydown", xmover._onKeyDown.bind(xmover));
