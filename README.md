@@ -19,4 +19,4 @@ As object's position and rotation changes these values are traced in console.
 
 
 Versions history:
-1.6 - Added scale
+1.6 - Added Scale change performed by keys "9" and "0".
