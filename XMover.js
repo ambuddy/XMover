@@ -5,18 +5,23 @@
  *	and view how its co0rdinates change in browser console.
  *
  *	Just add some objects to xmover in any part of code as follows:
- *	xmover.add(anyDisplayObject);
- *	xmover.add(myTextField, myPIXIContainer ... mySprite);
- *	xmover.add([myObj1, myObj2 ... myObjN]);
+ *	xmove(anyDisplayObject);
+ *	xmove(myTextField, myPIXIContainer ... mySprite);
+ *	xmove([myObj1, myObj2 ... myObjN]);
  *	You may add as many objects as you want as many times as desired passing one object,
  *	or a bunch of comma separated objects or an array of objects.
+ *	
+ *	Note that xmove() global function is a shorthand for method xmover.add().
  *
  *	Then you can move added objects one by one on the scene using arrow keys. Also you
- *	can rotate them using <> keys, hide and reveal using sqr bracket ([]) keys.
+ *	can rotate them using <> keys, hide and reveal using sqr bracket ([]) keys and scale
+ *	objects with 0 and 9 keys.
  *	Switching between objects performed by -+ keys. Once you switched to next object
  *	it jumps and blinks once.
  *
  *	As object's position and rotation changes these values are traced in console.
+ *
+ *	Don't forget to mouse click on the scene to give XMover ability to catch key press events.
  */
 
 
@@ -71,7 +76,7 @@ XMover.prototype.addOnly = function(objects)
 	this.wasAdded	= true;
 };
 
-XMover.prototype.isRegistered = function(keycode)
+XMover.prototype.isRegisteredKey = function(keycode)
 {
 	for(var i in XMover.hotkeys)
 	{
@@ -86,7 +91,7 @@ XMover.prototype._onKeyDown = function(event)
 	
 	var obj = this.objects[this.currentObj];
 	
-	if(!this.wasAdded || !this.isRegistered(event.keyCode))
+	if(!this.wasAdded || !this.isRegisteredKey(event.keyCode))
 	{
 		return;
 	}
