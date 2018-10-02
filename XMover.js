@@ -226,7 +226,7 @@ var xmover = new XMover();
 
 function xmove(objects)
 {
-	xmover.add.apply(xmover, arguments);
+	return xmover.add.apply(xmover, arguments);
 }
 
 $(window).on("keydown", xmover._onKeyDown.bind(xmover));
