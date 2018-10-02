@@ -1,5 +1,5 @@
 /**
- *	XMover v.1.6 (c) ambuddy
+ *	XMover v.1.6.1 (c) ambuddy
  *
  *	XMover is a tool helping you to interactively position any visual object on screen
  *	and view how its co0rdinates change in browser console.
@@ -66,8 +66,10 @@ XMover.prototype.constructor = XMover;
 XMover.prototype.add = function(objects)
 {
 	var args		= [].slice.call(arguments);
-	this.objects	= objects.split ? this.objects.concat(objects) : this.objects.concat(args);
+	this.objects	= objects.join ? this.objects.concat(objects) : this.objects.concat(args);
 	this.wasAdded	= true;
+	
+	return args[0];
 };
 
 XMover.prototype.addOnly = function(objects)
