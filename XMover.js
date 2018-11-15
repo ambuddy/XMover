@@ -31,9 +31,12 @@ function XMover()
 	
 	this.posStep		= 1;			// How fast object moves.
 	this.posStepFast	= 10;			// How fast object moves while Shift key is pressed.
+	this.posStepSlow	= 0.1;			// How fast object moves while Alt key is pressed.
 	this.rotStep		= 0.01;			// How fast object rotates.
-	this.rotStepFast	= 0.1;          // How fast object rotates while Shift key is pressed.
+	this.rotStepFast	= 0.1;          // How fast object rotates and scales while Shift key is pressed.
+	this.rotStepSlow	= 0.001;        // How fast object rotates and scales while Alt key is pressed.
 	this.alphaStep		= 1;			// Value of alpha changing. 1 means object hides and reveals instantly. 0.1 will cause object to (dis)appear smoothly.
+	this.precision		= 5;			// Values precision.
 	
 	// ----------- Don't change anything below this line ------------ //
 	
@@ -89,76 +92,89 @@ XMover.prototype.isRegisteredKey = function(keycode)
 
 XMover.prototype._onKeyDown = function(event)
 {
-	//console.log("XMover._onKeyDown", event.keyCode);
+	//console.log("XMover._onKeyDown", event);
 	
-	var obj = this.objects[this.currentObj];
+	var rnd			= function(value){ return this.roundTo(value, this.precision); }.bind(this);
+	var obj			= this.objects[this.currentObj];
 	
 	if(!this.wasAdded || !this.isRegisteredKey(event.keyCode))
 	{
 		return;
 	}
 	
+	event.preventDefault();
+	
 	switch(event.keyCode)
 	{
 		case XMover.hotkeys.LEFT:
-			obj.x -= (event.shiftKey ? this.posStepFast : this.posStep);
+			obj.x			-= (event.shiftKey ? this.posStepFast : event.altKey ? this.posStepSlow : this.posStep);
+			obj.x			= rnd(obj.x);
 			break;
 		
 		case XMover.hotkeys.RIGHT:
-			obj.x += (event.shiftKey ? this.posStepFast : this.posStep);
+			obj.x			+= (event.shiftKey ? this.posStepFast : event.altKey ? this.posStepSlow : this.posStep);
+			obj.x			= rnd(obj.x);
 			break;
 		
 		case XMover.hotkeys.UP:
-			obj.y -= (event.shiftKey ? this.posStepFast : this.posStep);
+			obj.y			-= (event.shiftKey ? this.posStepFast : event.altKey ? this.posStepSlow : this.posStep);
+			obj.y			= rnd(obj.y);
 			break;
 		
 		case XMover.hotkeys.DOWN:
-			obj.y += (event.shiftKey ? this.posStepFast : this.posStep);
-			break;
-		
-		case XMover.hotkeys.DECREASE_ALPHA:
-			obj.alpha = Math.max(0, obj.alpha - this.alphaStep);
-			break;
-		
-		case XMover.hotkeys.INCREASE_ALPHA:
-			obj.alpha = Math.min(1, obj.alpha + this.alphaStep);
+			obj.y			+= (event.shiftKey ? this.posStepFast : event.altKey ? this.posStepSlow : this.posStep);
+			obj.y			= rnd(obj.y);
 			break;
 		
 		case XMover.hotkeys.DECREASE_SCALE:
-			obj.scale.x	= Math.max(0, obj.scale.x - (event.shiftKey ? this.rotStepFast : this.rotStep));
-			obj.scale.y	= Math.max(0, obj.scale.y - (event.shiftKey ? this.rotStepFast : this.rotStep));
+			obj.scale.x		= Math.max(0, obj.scale.x - (event.shiftKey ? this.rotStepFast : event.altKey ? this.rotStepSlow : this.rotStep));
+			obj.scale.y		= Math.max(0, obj.scale.y - (event.shiftKey ? this.rotStepFast : event.altKey ? this.rotStepSlow : this.rotStep));
+			obj.scale.x		= rnd(obj.scale.x);
+			obj.scale.y		= rnd(obj.scale.y);
 			break;
 		
 		case XMover.hotkeys.INCREASE_SCALE:
-			obj.scale.x	= obj.scale.x + (event.shiftKey ? this.rotStepFast : this.rotStep);
-			obj.scale.y	= obj.scale.y + (event.shiftKey ? this.rotStepFast : this.rotStep);
-			break;
-		
-		case XMover.hotkeys.PREV:
-			obj = this.nextObject(-1);
-			break;
-		
-		case XMover.hotkeys.NEXT:
-			obj = this.nextObject(1);
+			obj.scale.x		= obj.scale.x + (event.shiftKey ? this.rotStepFast : event.altKey ? this.rotStepSlow : this.rotStep);
+			obj.scale.y		= obj.scale.y + (event.shiftKey ? this.rotStepFast : event.altKey ? this.rotStepSlow : this.rotStep);
+			obj.scale.x		= rnd(obj.scale.x);
+			obj.scale.y		= rnd(obj.scale.y);
 			break;
 		
 		case XMover.hotkeys.ROTATE_LEFT:
-			obj.rotation -= (event.shiftKey ? this.rotStepFast : this.rotStep);
+			obj.rotation	-= (event.shiftKey ? this.rotStepFast : event.altKey ? this.rotStepSlow : this.rotStep);
+			obj.rotation	= rnd(obj.rotation);
 			break;
 		
 		case XMover.hotkeys.ROTATE_RIGHT:
-			obj.rotation += (event.shiftKey ? this.rotStepFast : this.rotStep);
+			obj.rotation	+= (event.shiftKey ? this.rotStepFast : event.altKey ? this.rotStepSlow : this.rotStep);
+			obj.rotation	= rnd(obj.rotation);
+			break;
+		
+		case XMover.hotkeys.DECREASE_ALPHA:
+			obj.alpha		= Math.max(0, obj.alpha - this.alphaStep);
+			break;
+		
+		case XMover.hotkeys.INCREASE_ALPHA:
+			obj.alpha		= Math.min(1, obj.alpha + this.alphaStep);
+			break;
+		
+		case XMover.hotkeys.PREV:
+			obj				= this.nextObject(-1);
+			break;
+		
+		case XMover.hotkeys.NEXT:
+			obj				= this.nextObject(1);
 			break;
 	}
 	
-	var id	= obj.id != undefined ? obj.id : obj.title != undefined ? obj.title : obj.name != undefined ? obj.name : undefined;
+	var id			= obj.id != undefined ? obj.id : obj.title != undefined ? obj.title : obj.name != undefined ? obj.name : undefined;
 	
 	console.log(
 		(id != undefined ? "{ id: " + id + "," : "{"),
-		"x:", obj.x,
-		", y:", obj.y,
-		", rotation:", this.roundTo(obj.rotation, 2),
-		", scale:{ x:", this.roundTo(obj.scale.x, 2), ", y:", this.roundTo(obj.scale.y, 2), "} }");
+		"x:", rnd(obj.x),
+		", y:", rnd(obj.y),
+		", rotation:", rnd(obj.rotation),
+		", scale:{ x:", rnd(obj.scale.x), ", y:", rnd(obj.scale.y), "} }");
 };
 
 XMover.prototype.nextObject = function(increment)
