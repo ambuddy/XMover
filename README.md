@@ -1,4 +1,4 @@
-# XMover v.1.6
+# XMover v.1.7
 
 XMover is a tool helping you to interactively position any visual object on screen and view how its coordinates change in browser console.
 
@@ -25,4 +25,5 @@ As object's position and rotation changes these values are traced in console.
 
 
 ## Versions history:
+1.7 - Added Alt-key functionality to slower moves
 1.6 - Added Scale change performed by keys "9" and "0".
