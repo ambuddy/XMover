@@ -1,5 +1,5 @@
 /**
- *	XMover v.1.7 (c) ambuddy
+ *	XMover v.1.8 (c) ambuddy
  *
  *	XMover is a tool helping you to interactively position any visual object on screen
  *	and view how its co0rdinates change in browser console.
