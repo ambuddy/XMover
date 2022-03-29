@@ -7,7 +7,8 @@ XMover supposed to be used in graphic interfaces and games written in JavaScript
 Just add some objects to xmover in any part of code as follows:
 
 ```
-  import xmove from './xmove.js'
+  import xmove from './xmove'
+  import {xmover} from './xmove'
   
   xmover.add(anyDisplayObject);
   xmover.add(myTextField, myPIXIContainer ... mySprite);
