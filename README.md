@@ -28,6 +28,6 @@ As object's position and rotation changes these values are traced in console.
 
 
 ## Versions history:
-1.8 - Migrate from prototypes to class
+1.8 - Migrate from prototypes to class<br>
 1.7 - Added Alt-key functionality to slower moves<br>
 1.6 - Added Scale change performed by keys "9" and "0".
