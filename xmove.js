@@ -234,7 +234,7 @@ class XMover
 
 }
 
-let xmover = new XMover();
+export let xmover = new XMover();
 
 export default function xmove(objects)
 {
